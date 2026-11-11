@@ -7,43 +7,58 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
-  :root{
+  /* ===== المساء (غامق) ===== */
+  :root, body.evening{
     --bg1:#0a1630; --bg2:#0f2147; --card:#13264f; --card2:#172d5c;
-    --line:rgba(212,175,95,.22); --gold:#e2b75a; --gold2:#f6d38a;
-    --text:#f3f1ea; --muted:#a9b4cc; --done:#2f7d5b;
+    --cardBorder:rgba(255,255,255,.07);
+    --line:rgba(212,175,95,.22); --gold:#e2b75a; --gold2:#f6d38a; --goldText:#f6d38a;
+    --text:#f3f1ea; --muted:#a9b4cc; --soft:#dfe5f2;
+    --tagBg:rgba(0,0,0,.25); --tagBorder:rgba(255,255,255,.08); --tagText:#d9dfec;
+    --fillA:rgba(226,183,90,.05); --fillB:rgba(226,183,90,.16);
+    --glow:rgba(226,183,90,.12); --modalBg:rgba(3,8,20,.7);
+    --inputBg:rgba(0,0,0,.25);
+  }
+  /* ===== الصباح (فاتح) ===== */
+  body.morning{
+    --bg1:#fbf6ea; --bg2:#fffdf7; --card:#ffffff; --card2:#fffaf0;
+    --cardBorder:rgba(160,120,40,.16);
+    --line:rgba(176,132,48,.28); --gold:#b7862c; --gold2:#d9a441; --goldText:#9a6f1f;
+    --text:#2a2418; --muted:#7d725e; --soft:#4a4231;
+    --tagBg:#f6efdf; --tagBorder:rgba(160,120,40,.18); --tagText:#6b5e45;
+    --fillA:rgba(217,164,65,.06); --fillB:rgba(217,164,65,.20);
+    --glow:rgba(226,183,90,.22); --modalBg:rgba(60,45,20,.35);
+    --inputBg:#fffdf7;
   }
   *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{margin:0}
   body{
     font-family:"Tajawal",system-ui,sans-serif;color:var(--text);
     background:
-      radial-gradient(900px 500px at 50% -10%, rgba(226,183,90,.12), transparent 60%),
+      radial-gradient(900px 500px at 50% -10%, var(--glow), transparent 60%),
       linear-gradient(180deg,var(--bg2),var(--bg1));
-    min-height:100vh;
+    min-height:100vh;transition:background .4s,color .4s;
   }
-  body::before{ /* subtle geometric texture */
+  body::before{
     content:"";position:fixed;inset:0;pointer-events:none;opacity:.05;
-    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0l8 22 22 8-22 8-8 22-8-22-22-8 22-8z' fill='none' stroke='%23e2b75a' stroke-width='1'/%3E%3C/svg%3E");
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M30 0l8 22 22 8-22 8-8 22-8-22-22-8 22-8z' fill='none' stroke='%23b7862c' stroke-width='1'/%3E%3C/svg%3E");
   }
   .wrap{max-width:760px;margin:0 auto;padding:28px 16px 40px;position:relative}
 
-  /* header ring */
   .hero{display:flex;flex-direction:column;align-items:center;text-align:center}
   .ring{position:relative;width:180px;height:180px}
   .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
   .ring .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring .num{font-weight:800;font-size:56px;line-height:1;color:var(--gold2);
-    background:linear-gradient(180deg,#fbe3a6,#d9a441);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ring .num{font-weight:800;font-size:56px;line-height:1;
+    background:linear-gradient(180deg,#f3cf7a,#c08a2e);-webkit-background-clip:text;background-clip:text;color:transparent}
   .ring .lbl{font-size:15px;color:var(--muted);margin-top:4px}
   h1{font-family:"Amiri",serif;font-size:40px;margin:14px 0 6px;font-weight:700}
   h1 span{color:var(--gold)}
-  .hadith{font-family:"Amiri",serif;font-size:19px;color:#dfe5f2;margin:0}
+  .hadith{font-family:"Amiri",serif;font-size:19px;color:var(--soft);margin:0}
   .hadith b{color:var(--gold);font-weight:700}
   .src{font-size:12px;color:var(--muted);margin-top:2px}
 
-  /* toggle */
   .toolbar{display:flex;justify-content:center;align-items:center;gap:10px;margin:22px 0 18px;flex-wrap:wrap}
-  .seg{display:inline-flex;background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:999px;padding:4px}
+  .seg{display:inline-flex;background:var(--tagBg);border:1px solid var(--line);border-radius:999px;padding:4px}
   .seg button{font:inherit;font-weight:700;font-size:15px;border:0;background:transparent;color:var(--muted);
     padding:8px 20px;border-radius:999px;cursor:pointer;transition:.2s}
   .seg button.on{background:linear-gradient(180deg,#f0c76d,#cf9a3a);color:#1b1404}
@@ -51,14 +66,13 @@
     padding:8px 14px;border-radius:999px;cursor:pointer}
   .ghost:hover{color:var(--text);border-color:var(--gold)}
 
-  /* grid */
   .grid{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
   .c1,.c2,.c3{grid-column:span 2}
-  .c4,.c5{grid-column:span 3}
-  .c6{grid-column:span 6}
+  .c4,.c5,.cx{grid-column:span 3}
+  .c6,.addCard{grid-column:span 6}
   @media (max-width:560px){
     .c1,.c2,.c3,.c4{grid-column:span 3}
-    .c5,.c6{grid-column:span 6}
+    .c5,.c6,.cx,.addCard{grid-column:span 6}
     h1{font-size:32px}
     .ring{width:150px;height:150px}.ring .num{font-size:46px}
   }
@@ -66,59 +80,80 @@
   .card{
     position:relative;overflow:hidden;cursor:pointer;user-select:none;-webkit-user-select:none;
     background:linear-gradient(180deg,var(--card2),var(--card));
-    border:1px solid rgba(255,255,255,.07);border-radius:16px;
+    border:1px solid var(--cardBorder);border-radius:16px;
     padding:20px 14px 16px;text-align:center;
-    transition:transform .08s ease, border-color .3s, box-shadow .3s;
+    transition:transform .08s ease, border-color .3s, box-shadow .3s, background .4s;
     display:flex;flex-direction:column;align-items:center;gap:10px;min-height:170px;justify-content:space-between
   }
+  body.morning .card{box-shadow:0 2px 10px rgba(120,90,30,.06)}
   .card:active{transform:scale(.97)}
-  .card::before{ /* gold top accent */
+  .card::before{
     content:"";position:absolute;top:0;left:50%;transform:translateX(-50%);
     width:42%;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)
   }
   .fill{position:absolute;inset:auto 0 0 0;height:0;pointer-events:none;
-    background:linear-gradient(180deg,rgba(226,183,90,.05),rgba(226,183,90,.16));transition:height .25s ease}
+    background:linear-gradient(180deg,var(--fillA),var(--fillB));transition:height .25s ease}
   .idx{font-size:12px;color:var(--gold);letter-spacing:1px;position:relative}
-  .txt{font-family:"Amiri",serif;font-weight:700;font-size:26px;line-height:1.5;position:relative}
+  .txt{font-family:"Amiri",serif;font-weight:700;font-size:26px;line-height:1.5;position:relative;word-break:break-word}
   .c6 .txt{font-size:24px}
-  .count{position:relative;font-weight:800;font-size:30px;line-height:1;color:var(--gold2)}
+  .cx .txt{font-size:22px}
+  .count{position:relative;font-weight:800;font-size:30px;line-height:1;color:var(--goldText)}
   .count small{font-size:14px;color:var(--muted);font-weight:500}
   .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;position:relative}
-  .tag{font-size:12px;color:#d9dfec;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.08);padding:4px 10px;border-radius:999px}
-  .reset{position:absolute;top:8px;left:8px;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.1);
-    background:rgba(0,0,0,.2);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
-  .reset:hover{color:var(--gold);border-color:var(--gold)}
-  .reset svg{width:15px;height:15px}
-  .check{display:none;position:relative;font-size:14px;font-weight:700;color:#1b1404;background:var(--gold);padding:3px 12px;border-radius:999px}
-  .card.done{border-color:rgba(226,183,90,.7);box-shadow:0 0 0 1px rgba(226,183,90,.35),0 8px 30px rgba(226,183,90,.12);cursor:default}
+  .tag{font-size:12px;color:var(--tagText);background:var(--tagBg);border:1px solid var(--tagBorder);padding:4px 10px;border-radius:999px}
+  .iconBtn{position:absolute;top:8px;width:30px;height:30px;border-radius:50%;border:1px solid var(--tagBorder);
+    background:var(--tagBg);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;padding:0}
+  .iconBtn:hover{color:var(--gold);border-color:var(--gold)}
+  .iconBtn svg{width:15px;height:15px}
+  .reset{left:8px}
+  .del{right:8px}
+  .del:hover{color:#c0392b;border-color:#c0392b}
+  .check{display:none;position:relative;font-size:14px;font-weight:700;color:#1b1404;background:var(--gold2);padding:3px 12px;border-radius:999px}
+  .card.done{border-color:var(--gold);box-shadow:0 0 0 1px var(--line),0 8px 30px var(--glow);cursor:default}
   .card.done .check{display:inline-block}
-  .card.done .count{color:var(--gold)}
   .bump{animation:bump .18s ease}
   @keyframes bump{50%{transform:scale(1.15)}}
+  .celebrate{animation:cele .6s ease}
+  @keyframes cele{30%{transform:scale(1.04)}60%{transform:scale(.98)}}
+
+  .addCard{border:2px dashed var(--line);border-radius:16px;background:transparent;color:var(--gold);
+    font:inherit;font-weight:700;font-size:18px;padding:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+  .addCard:hover{background:var(--tagBg)}
+  .addCard .plus{width:34px;height:34px;border-radius:50%;background:var(--gold);color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;line-height:1}
 
   .hint{text-align:center;color:var(--muted);font-size:13px;margin:14px 0 0}
   footer{text-align:center;margin-top:30px;padding-top:18px;border-top:1px solid var(--line);
-    font-family:"Amiri",serif;font-size:20px;color:var(--gold2)}
+    font-family:"Amiri",serif;font-size:20px;color:var(--goldText)}
 
-  /* dialog */
-  .modal{position:fixed;inset:0;background:rgba(3,8,20,.7);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
+  .modal{position:fixed;inset:0;background:var(--modalBg);display:none;align-items:center;justify-content:center;z-index:20;padding:20px}
   .modal.show{display:flex}
-  .box{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:340px;width:100%;text-align:center}
+  .box{background:var(--card2);color:var(--text);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:380px;width:100%;text-align:center}
   .box p{margin:0 0 16px;font-size:17px}
-  .box .row{display:flex;gap:10px;justify-content:center}
+  .box h3{margin:0 0 14px;font-family:"Amiri",serif;font-size:24px;color:var(--goldText)}
+  .box label{display:block;text-align:right;font-size:14px;color:var(--muted);margin:10px 0 6px}
+  .box textarea,.box input,.box select{width:100%;font:inherit;font-size:16px;color:var(--text);background:var(--inputBg);
+    border:1px solid var(--line);border-radius:10px;padding:10px 12px;outline:none}
+  .box textarea{font-family:"Amiri",serif;font-size:20px;min-height:84px;resize:vertical}
+  .box textarea:focus,.box input:focus,.box select:focus{border-color:var(--gold)}
+  .presets{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+  .presets button{font:inherit;font-size:14px;border:1px solid var(--line);background:transparent;color:var(--text);border-radius:999px;padding:5px 12px;cursor:pointer}
+  .presets button.on{background:var(--gold);color:#fff;border-color:var(--gold)}
+  .err{color:#c0392b;font-size:13px;min-height:18px;margin:8px 0 4px;text-align:right}
+  .box .row{display:flex;gap:10px;justify-content:center;margin-top:8px}
   .btn{font:inherit;font-weight:700;border:0;border-radius:10px;padding:10px 18px;cursor:pointer}
-  .btn.gold{background:var(--gold);color:#1b1404}
-  .btn.plain{background:rgba(255,255,255,.08);color:var(--text)}
+  .btn.gold{background:var(--gold);color:#fff}
+  body.evening .btn.gold{color:#1b1404}
+  .btn.plain{background:var(--tagBg);color:var(--text);border:1px solid var(--tagBorder)}
 </style>
 </head>
-<body>
+<body class="morning">
 <div class="wrap">
   <header class="hero">
     <div class="ring">
       <svg viewBox="0 0 200 200" aria-hidden="true">
-        <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(226,183,90,.18)" stroke-width="3" stroke-dasharray="1.2 6.2" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="88" fill="none" stroke="var(--line)" stroke-width="3" stroke-dasharray="1.2 6.2" stroke-linecap="round"/>
         <circle id="prog" cx="100" cy="100" r="88" fill="none" stroke="url(#g)" stroke-width="5" stroke-linecap="round" stroke-dasharray="552.9" stroke-dashoffset="552.9" style="transition:stroke-dashoffset .3s"/>
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fbe3a6"/><stop offset="1" stop-color="#d9a441"/></linearGradient></defs>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3cf7a"/><stop offset="1" stop-color="#c08a2e"/></linearGradient></defs>
       </svg>
       <div class="center"><div class="num">100</div><div class="lbl">مرة</div></div>
     </div>
@@ -141,106 +176,215 @@
   <footer>لا تنسونا من دعائكم .. أخوكم بوميره النقبي</footer>
 </div>
 
+<!-- نافذة التأكيد -->
 <div class="modal" id="modal">
   <div class="box">
     <p id="mText"></p>
     <div class="row">
-      <button class="btn gold" id="mYes">نعم، صفّر</button>
+      <button class="btn gold" id="mYes">نعم</button>
       <button class="btn plain" id="mNo">إلغاء</button>
     </div>
   </div>
 </div>
 
+<!-- نافذة إضافة ذكر -->
+<div class="modal" id="addModal">
+  <div class="box">
+    <h3>إضافة ذكر</h3>
+    <label for="aText">نص الذكر</label>
+    <textarea id="aText" placeholder="مثال: لا حول ولا قوة إلا بالله"></textarea>
+    <label for="aCount">عدد المرات</label>
+    <input id="aCount" type="number" inputmode="numeric" min="1" max="100000" value="100">
+    <div class="presets" id="presets">
+      <button type="button" data-n="3">٣</button>
+      <button type="button" data-n="7">٧</button>
+      <button type="button" data-n="10">١٠</button>
+      <button type="button" data-n="33">٣٣</button>
+      <button type="button" data-n="100" class="on">١٠٠</button>
+      <button type="button" data-n="1000">١٠٠٠</button>
+    </div>
+    <label for="aType">متى يُقال؟</label>
+    <select id="aType">
+      <option value="me">في الصباح والمساء (عدّاد لكلٍّ منهما)</option>
+      <option value="d">في اليوم (عدّاد واحد)</option>
+    </select>
+    <div class="err" id="aErr"></div>
+    <div class="row">
+      <button class="btn gold" id="aSave">إضافة</button>
+      <button class="btn plain" id="aCancel">إلغاء</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const TARGET = 100;
-const ITEMS = [
-  {id:1, text:"سبحان الله", tags:["100 مرة في الصباح والمساء"], daily:false},
-  {id:2, text:"الحمد لله", tags:["100 مرة في الصباح والمساء"], daily:false},
-  {id:3, text:"الله أكبر", tags:["100 مرة في الصباح والمساء"], daily:false},
-  {id:4, text:"سبحان الله وبحمده", tags:["100 مرة في الصباح والمساء"], daily:false},
-  {id:5, text:"أستغفر الله وأتوب إليه", tags:["100 مرة في اليوم"], daily:true},
-  {id:6, text:"لا إله إلا الله، وحده لا شريك له، له الملك،<br>وله الحمد، وهو على كل شيء قدير", tags:["100 مرة في الصباح والمساء","ورد: 100 مرة في اليوم"], daily:false},
+const BUILTIN = [
+  {id:"1", text:"سبحان الله", target:100, tags:["100 مرة في الصباح والمساء"], daily:false},
+  {id:"2", text:"الحمد لله", target:100, tags:["100 مرة في الصباح والمساء"], daily:false},
+  {id:"3", text:"الله أكبر", target:100, tags:["100 مرة في الصباح والمساء"], daily:false},
+  {id:"4", text:"سبحان الله وبحمده", target:100, tags:["100 مرة في الصباح والمساء"], daily:false},
+  {id:"5", text:"أستغفر الله وأتوب إليه", target:100, tags:["100 مرة في اليوم"], daily:true},
+  {id:"6", text:"لا إله إلا الله، وحده لا شريك له، له الملك،\nوله الحمد، وهو على كل شيء قدير", target:100, tags:["100 مرة في الصباح والمساء","ورد: 100 مرة في اليوم"], daily:false},
 ];
 const KEY = "adhkar-mi2awiyya-v1";
 const ar = n => String(n).replace(/\d/g, d => "٠١٢٣٤٥٦٧٨٩"[d]);
 
-let state = {period:"m", counts:{}};
-try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.counts) state = s; }catch(e){}
+let state = {period:"m", counts:{}, custom:[]};
+try{ const s = JSON.parse(localStorage.getItem(KEY)); if(s && s.counts){ state = Object.assign(state, s); } }catch(e){}
+if(!Array.isArray(state.custom)) state.custom = [];
 function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+// عند فتح الصفحة: الصباح من الفجر تقريبًا إلى قبيل العصر، وما بعده مساء
+(function(){ const h = new Date().getHours(); state.period = (h >= 3 && h < 15) ? "m" : "e"; })();
+
 const keyOf = it => it.daily ? "d"+it.id : state.period+it.id;
 const get = it => state.counts[keyOf(it)] || 0;
+const allItems = () => BUILTIN.concat(state.custom.map(c => ({
+  id:c.id, text:c.text, target:c.target, daily:c.daily, custom:true,
+  tags:[ar(c.target)+" مرة "+(c.daily ? "في اليوم" : "في الصباح والمساء")]
+})));
+
+function vibrate(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
 
 const resetIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>';
+const trashIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 14h10l1-14"/></svg>';
 
 const grid = document.getElementById("grid");
-ITEMS.forEach(it=>{
-  const el = document.createElement("div");
-  el.className = "card c"+it.id;
-  el.setAttribute("role","button");
-  el.setAttribute("tabindex","0");
-  el.innerHTML = `
-    <div class="fill"></div>
-    <button class="reset" title="تصفير هذا الذكر" aria-label="تصفير">${resetIcon}</button>
-    <div class="idx">${ar(String(it.id).padStart(2,"0"))}</div>
-    <div class="txt">${it.text}</div>
-    <div class="count"><span class="n">٠</span> <small>/ ${ar(TARGET)}</small></div>
-    <span class="check">تمّ بحمد الله ✓</span>
-    <div class="tags">${it.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>`;
-  it.el = el;
-  const tap = ()=>{
-    const k = keyOf(it), v = get(it);
-    if(v >= TARGET) return;
-    state.counts[k] = v+1; save();
-    try{ navigator.vibrate && navigator.vibrate(state.counts[k]===TARGET ? [60,60,120] : 12); }catch(e){}
-    render(it, true);
-  };
-  el.addEventListener("click", tap);
-  el.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); tap(); }});
-  el.querySelector(".reset").addEventListener("click", e=>{
-    e.stopPropagation();
-    if(!get(it)) return;
-    ask(`تصفير عدّاد «${it.text.replace(/<br>/g," ").split("،")[0]}»${it.daily?"":" ("+(state.period==="m"?"الصباح":"المساء")+")"}؟`, ()=>{
-      delete state.counts[keyOf(it)]; save(); renderAll();
+let items = [];
+
+function build(){
+  grid.innerHTML = "";
+  items = allItems();
+  items.forEach((it, i)=>{
+    const el = document.createElement("div");
+    el.className = "card " + (it.custom ? "cx" : "c"+it.id);
+    el.setAttribute("role","button");
+    el.setAttribute("tabindex","0");
+    el.innerHTML = `
+      <div class="fill"></div>
+      <button class="iconBtn reset" title="تصفير هذا الذكر" aria-label="تصفير">${resetIcon}</button>
+      ${it.custom ? `<button class="iconBtn del" title="حذف هذا الذكر" aria-label="حذف">${trashIcon}</button>` : ""}
+      <div class="idx">${ar(String(i+1).padStart(2,"0"))}</div>
+      <div class="txt"></div>
+      <div class="count"><span class="n">٠</span> <small>/ ${ar(it.target)}</small></div>
+      <span class="check">تمّ بحمد الله ✓</span>
+      <div class="tags"></div>`;
+    // النصوص تُضاف كنص عادي حتى لا يُفسَّر ما يكتبه الزائر كأكواد
+    const t = el.querySelector(".txt");
+    it.text.split("\n").forEach((line, j)=>{ if(j) t.appendChild(document.createElement("br")); t.appendChild(document.createTextNode(line)); });
+    const tg = el.querySelector(".tags");
+    it.tags.forEach(x=>{ const s=document.createElement("span"); s.className="tag"; s.textContent=x; tg.appendChild(s); });
+    it.el = el;
+
+    const tap = ()=>{
+      const v = get(it);
+      if(v >= it.target) return;
+      state.counts[keyOf(it)] = v+1; save();
+      if(v+1 === it.target){
+        vibrate([200,100,200,100,400]);   // اهتزاز عند إكمال العدد فقط
+        el.classList.remove("celebrate"); void el.offsetWidth; el.classList.add("celebrate");
+      }
+      render(it, true);
+    };
+    el.addEventListener("click", tap);
+    el.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){ e.preventDefault(); tap(); }});
+
+    const short = it.text.split(/[،\n]/)[0];
+    el.querySelector(".reset").addEventListener("click", e=>{
+      e.stopPropagation();
+      if(!get(it)) return;
+      ask(`تصفير عدّاد «${short}»${it.daily?"":" ("+(state.period==="m"?"الصباح":"المساء")+")"}؟`, "نعم، صفّر", ()=>{
+        delete state.counts[keyOf(it)]; save(); renderAll();
+      });
     });
+    const del = el.querySelector(".del");
+    if(del) del.addEventListener("click", e=>{
+      e.stopPropagation();
+      ask(`حذف الذكر «${short}» من الصفحة؟`, "نعم، احذف", ()=>{
+        state.custom = state.custom.filter(c => c.id !== it.id);
+        ["m","e","d"].forEach(p => delete state.counts[p+it.id]);
+        save(); build();
+      });
+    });
+    grid.appendChild(el);
   });
-  grid.appendChild(el);
-});
+
+  const add = document.createElement("button");
+  add.className = "addCard";
+  add.innerHTML = '<span class="plus">+</span> أضف ذكرًا من اختيارك';
+  add.addEventListener("click", openAdd);
+  grid.appendChild(add);
+  renderAll();
+}
 
 function render(it, anim){
   const v = get(it), el = it.el, n = el.querySelector(".n");
   n.textContent = ar(v);
-  el.querySelector(".fill").style.height = (v/TARGET*100)+"%";
-  el.classList.toggle("done", v>=TARGET);
+  el.querySelector(".fill").style.height = (v/it.target*100)+"%";
+  el.classList.toggle("done", v>=it.target);
   if(anim){ n.parentElement.classList.remove("bump"); void n.offsetWidth; n.parentElement.classList.add("bump"); }
   summary();
 }
 function summary(){
-  const total = ITEMS.reduce((s,it)=>s+Math.min(get(it),TARGET),0);
-  const done = ITEMS.filter(it=>get(it)>=TARGET).length;
+  const total = items.reduce((s,it)=>s+Math.min(get(it),it.target),0);
+  const max = items.reduce((s,it)=>s+it.target,0);
+  const done = items.filter(it=>get(it)>=it.target).length;
   const C = 552.9;
-  document.getElementById("prog").style.strokeDashoffset = C - C*total/(TARGET*ITEMS.length);
+  document.getElementById("prog").style.strokeDashoffset = C - C*(max ? total/max : 0);
   document.getElementById("summary").textContent =
-    done===ITEMS.length ? "أتممتَ أذكار "+(state.period==="m"?"الصباح":"المساء")+" كلها، تقبّل الله منك 🤍"
-    : `أتممتَ ${ar(done)} من ${ar(ITEMS.length)} — اضغط على الذكر ليُحسب`;
+    done===items.length ? "أتممتَ أذكار "+(state.period==="m"?"الصباح":"المساء")+" كلها، تقبّل الله منك 🤍"
+    : `أتممتَ ${ar(done)} من ${ar(items.length)} — اضغط على الذكر ليُحسب`;
 }
-function renderAll(){ ITEMS.forEach(it=>render(it,false)); }
+function renderAll(){ items.forEach(it=>render(it,false)); }
 
 function setPeriod(p){
   state.period = p; save();
+  document.body.classList.toggle("morning", p==="m");
+  document.body.classList.toggle("evening", p==="e");
   document.getElementById("tMorning").classList.toggle("on", p==="m");
   document.getElementById("tEvening").classList.toggle("on", p==="e");
   renderAll();
 }
 document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>setPeriod(b.dataset.p)));
 
+// نافذة التأكيد
 const modal = document.getElementById("modal"); let onYes = null;
-function ask(text, fn){ document.getElementById("mText").textContent = text; onYes = fn; modal.classList.add("show"); }
+function ask(text, yesLabel, fn){
+  document.getElementById("mText").textContent = text;
+  document.getElementById("mYes").textContent = yesLabel;
+  onYes = fn; modal.classList.add("show");
+}
 document.getElementById("mYes").onclick = ()=>{ modal.classList.remove("show"); onYes && onYes(); };
 document.getElementById("mNo").onclick = ()=> modal.classList.remove("show");
 modal.addEventListener("click", e=>{ if(e.target===modal) modal.classList.remove("show"); });
-document.getElementById("resetAll").onclick = ()=> ask("تصفير جميع العدّادات (الصباح والمساء واليومي)؟", ()=>{ state.counts = {}; save(); renderAll(); });
+document.getElementById("resetAll").onclick = ()=> ask("تصفير جميع العدّادات (الصباح والمساء واليومي)؟", "نعم، صفّر", ()=>{ state.counts = {}; save(); renderAll(); });
 
-setPeriod(state.period==="e"?"e":"m");
+// نافذة إضافة ذكر
+const addModal = document.getElementById("addModal");
+const aText = document.getElementById("aText"), aCount = document.getElementById("aCount"),
+      aType = document.getElementById("aType"), aErr = document.getElementById("aErr");
+const presetBtns = document.querySelectorAll("#presets button");
+function markPreset(){ presetBtns.forEach(b=>b.classList.toggle("on", b.dataset.n === String(aCount.value))); }
+presetBtns.forEach(b=>b.addEventListener("click", ()=>{ aCount.value = b.dataset.n; markPreset(); }));
+aCount.addEventListener("input", markPreset);
+function openAdd(){
+  aText.value = ""; aCount.value = 100; aType.value = "me"; aErr.textContent = ""; markPreset();
+  addModal.classList.add("show"); setTimeout(()=>aText.focus(), 50);
+}
+document.getElementById("aCancel").onclick = ()=> addModal.classList.remove("show");
+addModal.addEventListener("click", e=>{ if(e.target===addModal) addModal.classList.remove("show"); });
+document.getElementById("aSave").onclick = ()=>{
+  const text = aText.value.trim().replace(/\s*\n\s*/g,"\n");
+  const n = parseInt(String(aCount.value).replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)), 10);
+  if(!text){ aErr.textContent = "اكتب نص الذكر."; return; }
+  if(text.length > 300){ aErr.textContent = "النص طويل، اختصره إلى ٣٠٠ حرف أو أقل."; return; }
+  if(!n || n < 1 || n > 100000){ aErr.textContent = "اكتب عددًا صحيحًا من ١ إلى ١٠٠٠٠٠."; return; }
+  state.custom.push({id:"c"+Date.now(), text, target:n, daily: aType.value === "d"});
+  save(); addModal.classList.remove("show"); build();
+  setTimeout(()=>grid.querySelector(".addCard").scrollIntoView({behavior:"smooth", block:"center"}), 50);
+};
+
+build();
+setPeriod(state.period);
 </script>
 </body>
 </html>
